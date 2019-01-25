@@ -10,6 +10,10 @@ import pathToRegexp from 'path-to-regexp';
 import Media from 'react-media';
 import { formatMessage } from 'umi/locale';
 import Authorized from '@/utils/Authorized';
+
+import { Drizzle, generateStore } from 'drizzle';
+import { DrizzleContext } from 'drizzle-react';
+
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
 import Header from './Header';
@@ -18,7 +22,6 @@ import Exception403 from '../pages/Exception/403';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import { menu, title } from '../defaultSettings';
-
 import styles from './BasicLayout.less';
 
 // lazy load SettingDrawer
@@ -50,6 +53,18 @@ const query = {
     minWidth: 1600,
   },
 };
+
+const options = {
+  contracts: [],
+  web3: {
+    fallback: {
+      type: 'ws',
+      url: 'ws://127.0.0.1:8545',
+    },
+  },
+};
+const drizzleStore = generateStore(options);
+const drizzle = new Drizzle(options, drizzleStore);
 
 class BasicLayout extends React.PureComponent {
   constructor(props) {
@@ -209,13 +224,15 @@ class BasicLayout extends React.PureComponent {
     return (
       <React.Fragment>
         <DocumentTitle title={this.getPageTitle(pathname, breadcrumbNameMap)}>
-          <ContainerQuery query={query}>
-            {params => (
-              <Context.Provider value={this.getContext()}>
-                <div className={classNames(params)}>{layout}</div>
-              </Context.Provider>
-            )}
-          </ContainerQuery>
+          <DrizzleContext.Provider drizzle={drizzle}>
+            <ContainerQuery query={query}>
+              {params => (
+                <Context.Provider value={this.getContext()}>
+                  <div className={classNames(params)}>{layout}</div>
+                </Context.Provider>
+              )}
+            </ContainerQuery>
+          </DrizzleContext.Provider>
         </DocumentTitle>
         <Suspense fallback={<PageLoading />}>{this.renderSettingDrawer()}</Suspense>
       </React.Fragment>

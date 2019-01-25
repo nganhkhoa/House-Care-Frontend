@@ -82,7 +82,7 @@ class LoginPage extends Component {
               !submitting &&
               this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
             <UserName
-              name="userName"
+              name="username"
               placeholder={`${formatMessage({ id: 'app.login.userName' })}: admin or user`}
               rules={[
                 {
@@ -128,7 +128,7 @@ class LoginPage extends Component {
               name="captcha"
               placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
               countDown={120}
-              onGetCaptcha={this.onGetCaptcha}
+              onGetCaptcha={() => {}}
               getCaptchaButtonText={formatMessage({ id: 'form.get-captcha' })}
               getCaptchaSecondText={formatMessage({ id: 'form.captcha.second' })}
               rules={[
@@ -152,9 +152,9 @@ class LoginPage extends Component {
           </Submit>
           <div className={styles.other}>
             <FormattedMessage id="app.login.sign-in-with" />
-            <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
-            <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
-            <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
+            <Icon type="google" className={styles.icon} theme="outlined" />
+            <Icon type="facebook" className={styles.icon} theme="outlined" />
+            <Icon type="linkedin" className={styles.icon} theme="outlined" />
             <Link className={styles.register} to="/user/register">
               <FormattedMessage id="app.login.signup" />
             </Link>

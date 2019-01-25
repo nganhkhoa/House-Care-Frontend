@@ -9,5 +9,6 @@ module.exports = {
   menu: {
     disableLocal: false,
   },
-  title: 'Ant Design Pro',
+  title: 'House Care System',
+  apiUrl: '/api/v1',
 };

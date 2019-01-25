@@ -15,25 +15,15 @@ export default [
     path: '/',
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user'],
+    authority: ['admin', 'helper', 'owner'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/', redirect: '/dashboard/workplace' },
       {
         path: '/dashboard',
         name: 'dashboard',
         icon: 'dashboard',
         routes: [
-          {
-            path: '/dashboard/analysis',
-            name: 'analysis',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/dashboard/monitor',
-            name: 'monitor',
-            component: './Dashboard/Monitor',
-          },
           {
             path: '/dashboard/workplace',
             name: 'workplace',
@@ -43,9 +33,10 @@ export default [
       },
       // forms
       {
-        path: '/form',
+        path: '/post',
         icon: 'form',
         name: 'form',
+        authority: ['admin'],
         routes: [
           {
             path: '/form/basic-form',
@@ -89,9 +80,9 @@ export default [
       },
       // list
       {
-        path: '/list',
+        path: '/work',
         icon: 'table',
-        name: 'list',
+        name: 'Works',
         routes: [
           {
             path: '/list/table-list',
@@ -156,8 +147,8 @@ export default [
         ],
       },
       {
-        name: 'result',
-        icon: 'check-circle-o',
+        // name: 'result',
+        // icon: 'check-circle-o',
         path: '/result',
         routes: [
           // result
@@ -170,8 +161,8 @@ export default [
         ],
       },
       {
-        name: 'exception',
-        icon: 'warning',
+        // name: 'exception',
+        // icon: 'warning',
         path: '/exception',
         routes: [
           // exception

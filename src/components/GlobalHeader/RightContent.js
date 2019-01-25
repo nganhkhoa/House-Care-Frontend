@@ -89,6 +89,7 @@ export default class GlobalHeaderRight extends PureComponent {
       skeletonCount,
       theme,
     } = this.props;
+    const currentUserNotificationCount = currentUser.data ? 0 : 0;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
@@ -141,7 +142,7 @@ export default class GlobalHeaderRight extends PureComponent {
         <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
           <a
             target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
+            href="https://localhost:8000/#"
             rel="noopener noreferrer"
             className={styles.action}
           >
@@ -150,7 +151,7 @@ export default class GlobalHeaderRight extends PureComponent {
         </Tooltip>
         <NoticeIcon
           className={styles.action}
-          count={currentUser.unreadCount}
+          count={currentUserNotificationCount}
           onItemClick={(item, tabProps) => {
             console.log(item, tabProps); // eslint-disable-line
             this.changeReadState(item, tabProps);
@@ -195,16 +196,16 @@ export default class GlobalHeaderRight extends PureComponent {
             {...loadMoreProps}
           />
         </NoticeIcon>
-        {currentUser.name ? (
+        {currentUser.data ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
               <Avatar
                 size="small"
                 className={styles.avatar}
-                src={currentUser.avatar}
+                src={currentUser.data.avatar}
                 alt="avatar"
               />
-              <span className={styles.name}>{currentUser.name}</span>
+              <span className={styles.name}>{currentUser.data.name}</span>
             </span>
           </HeaderDropdown>
         ) : (
