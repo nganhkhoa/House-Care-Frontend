@@ -69,7 +69,7 @@ export default function request(url, option) {
     ...option,
   };
 
-  const newUrl = url.indexOf('v1') === -1 ? url : `http://localhost:5000${url}`;
+  const newUrl = `http://localhost:5000${url}`;
 
   /**
    * Produce fingerprints based on url and parameters
@@ -81,10 +81,14 @@ export default function request(url, option) {
     .update(fingerprint)
     .digest('hex');
 
+  const user = localStorage.getItem('user') || '{"token": ""}';
+  const { token } = JSON.parse(user);
+
   const defaultOptions = {
     credentials: 'omit',
-    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}` },
+    headers: { Authorization: `Bearer ${token}` },
   };
+
   const newOptions = { ...defaultOptions, ...options };
   if (
     newOptions.method === 'POST' ||
