@@ -5,37 +5,10 @@ import Link from 'umi/link';
 import { Row, Col, Card, List, Avatar } from 'antd';
 
 import { Radar } from '@/components/Charts';
-import EditableLinkGroup from '@/components/EditableLinkGroup';
+// import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './Workplace.less';
-
-const links = [
-  {
-    title: '操作一',
-    href: '',
-  },
-  {
-    title: '操作二',
-    href: '',
-  },
-  {
-    title: '操作三',
-    href: '',
-  },
-  {
-    title: '操作四',
-    href: '',
-  },
-  {
-    title: '操作五',
-    href: '',
-  },
-  {
-    title: '操作六',
-    href: '',
-  },
-];
 
 @connect(({ user, project, activities, chart, loading }) => ({
   currentUser: user.currentUser,
@@ -48,26 +21,26 @@ const links = [
 }))
 class Workplace extends PureComponent {
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'user/fetchCurrent',
-    });
-    dispatch({
-      type: 'project/fetchNotice',
-    });
-    dispatch({
-      type: 'activities/fetchList',
-    });
-    dispatch({
-      type: 'chart/fetch',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'user/fetchCurrent',
+    // });
+    // dispatch({
+    //   type: 'project/fetchNotice',
+    // });
+    // dispatch({
+    //   type: 'activities/fetchList',
+    // });
+    // dispatch({
+    //   type: 'chart/fetch',
+    // });
   }
 
   componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'chart/clear',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'chart/clear',
+    // });
   }
 
   renderActivities() {
@@ -109,13 +82,14 @@ class Workplace extends PureComponent {
 
   render() {
     const {
-      currentUser,
+      currentUser: { data },
       currentUserLoading,
       project: { notice },
       projectLoading,
-      activitiesLoading,
+      // activitiesLoading,
       chart: { radarData },
     } = this.props;
+    const currentUser = data;
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
@@ -124,13 +98,9 @@ class Workplace extends PureComponent {
             <Avatar size="large" src={currentUser.avatar} />
           </div>
           <div className={styles.content}>
-            <div className={styles.contentTitle}>
-              早安，
-              {currentUser.name}
-              ，祝你开心每一天！
-            </div>
+            <div className={styles.contentTitle}>Xin chào, {currentUser.name}.</div>
             <div>
-              {currentUser.title} |{currentUser.group}
+              {currentUser.role} | {currentUser.email}
             </div>
           </div>
         </div>
@@ -139,17 +109,17 @@ class Workplace extends PureComponent {
     const extraContent = (
       <div className={styles.extraContent}>
         <div className={styles.statItem}>
-          <p>项目数</p>
+          <p>Công việc đã nhận</p>
           <p>56</p>
         </div>
         <div className={styles.statItem}>
-          <p>团队内排名</p>
+          <p>Công việc trong tuần</p>
           <p>
             8<span> / 24</span>
           </p>
         </div>
         <div className={styles.statItem}>
-          <p>项目访问</p>
+          <p>Điểm đánh giá</p>
           <p>2,223</p>
         </div>
       </div>
@@ -166,9 +136,9 @@ class Workplace extends PureComponent {
             <Card
               className={styles.projectList}
               style={{ marginBottom: 24 }}
-              title="进行中的项目"
+              title="Các công việc của ngày hôm nay"
               bordered={false}
-              extra={<Link to="/">全部项目</Link>}
+              extra={<Link to="/">Xem tất cả lịch trình</Link>}
               loading={projectLoading}
               bodyStyle={{ padding: 0 }}
             >
@@ -196,54 +166,16 @@ class Workplace extends PureComponent {
                 </Card.Grid>
               ))}
             </Card>
-            <Card
-              bodyStyle={{ padding: 0 }}
-              bordered={false}
-              className={styles.activeCard}
-              title="动态"
-              loading={activitiesLoading}
-            >
-              <List loading={activitiesLoading} size="large">
-                <div className={styles.activitiesList}>{this.renderActivities()}</div>
-              </List>
-            </Card>
           </Col>
           <Col xl={8} lg={24} md={24} sm={24} xs={24}>
             <Card
               style={{ marginBottom: 24 }}
-              title="快速开始 / 便捷导航"
               bordered={false}
-              bodyStyle={{ padding: 0 }}
-            >
-              <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
-            </Card>
-            <Card
-              style={{ marginBottom: 24 }}
-              bordered={false}
-              title="XX 指数"
+              title="Thông tin nổi bật"
               loading={radarData.length === 0}
             >
               <div className={styles.chart}>
                 <Radar hasLegend height={343} data={radarData} />
-              </div>
-            </Card>
-            <Card
-              bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
-              bordered={false}
-              title="团队"
-              loading={projectLoading}
-            >
-              <div className={styles.members}>
-                <Row gutter={48}>
-                  {notice.map(item => (
-                    <Col span={12} key={`members-item-${item.id}`}>
-                      <Link to={item.href}>
-                        <Avatar src={item.logo} size="small" />
-                        <span className={styles.member}>{item.member}</span>
-                      </Link>
-                    </Col>
-                  ))}
-                </Row>
               </div>
             </Card>
           </Col>
