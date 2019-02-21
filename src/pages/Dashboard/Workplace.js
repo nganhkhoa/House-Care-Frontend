@@ -8,6 +8,8 @@ import { Radar } from '@/components/Charts';
 // import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
+import StandardTable from '@/components/StandardTable';
+
 import styles from './Workplace.less';
 
 @connect(({ user, project, activities, chart, loading }) => ({
@@ -165,6 +167,15 @@ class Workplace extends PureComponent {
                   </Card>
                 </Card.Grid>
               ))}
+
+              {/* <StandardTable
+              selectedRows={selectedRows}
+              loading={loading}
+              data={data}
+              columns={this.columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+            /> */}
             </Card>
           </Col>
           <Col xl={8} lg={24} md={24} sm={24} xs={24}>

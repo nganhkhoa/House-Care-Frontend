@@ -3,8 +3,9 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress, DatePicker } from 'antd';
 import styles from './Register.less';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -46,6 +47,16 @@ class Register extends Component {
     visible: false,
     help: '',
     prefix: '86',
+    // name: '',
+    // email: '',
+    // username: '',
+    // password: '',
+    // password1: '',
+    // sex: '',
+    // DoB: new Date(),
+    // experience: '',
+    // address: '',
+    // role: ''
   };
 
   componentDidUpdate() {
@@ -184,7 +195,18 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('name', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.name.required' }),
+                },
+              ],
+            })(<Input size="large" placeholder={formatMessage({ id: 'form.name.placeholder' })} />)}
+          </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('email', {
               rules: [
                 {
                   required: true,
@@ -199,6 +221,23 @@ class Register extends Component {
               <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
             )}
           </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('username', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.username.required' }),
+                },
+              ],
+            })(
+              <Input
+                size="large"
+                placeholder={formatMessage({ id: 'form.username.placeholder' })}
+              />
+            )}
+          </FormItem>
+
           <FormItem help={help}>
             <Popover
               getPopupContainer={node => node.parentNode}
@@ -249,6 +288,92 @@ class Register extends Component {
               />
             )}
           </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('sex', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.sex.required' }),
+                },
+              ],
+            })(
+              <Select defaultValue="1" placeholder={formatMessage({ id: 'form.sex.placeholder' })}>
+                <Option value="1" disable={false}>
+                  Nữ
+                </Option>
+                <Option value="2" disable={false}>
+                  Nam
+                </Option>
+              </Select>
+            )}
+          </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('DoB', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.DoB.required' }),
+                },
+              ],
+            })(
+              <DatePicker
+                showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
+                placeholder={formatMessage({ id: 'form.DoB.placeholder' })}
+              />
+            )}
+          </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('experience', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.experience.required' }),
+                },
+              ],
+            })(
+              <Input
+                size="large"
+                placeholder={formatMessage({ id: 'form.experience.placeholder' })}
+              />
+            )}
+          </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('address', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.address.required' }),
+                },
+              ],
+            })(
+              <Input size="large" placeholder={formatMessage({ id: 'form.address.placeholder' })} />
+            )}
+          </FormItem>
+
+          <FormItem>
+            {getFieldDecorator('role', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.role.required' }),
+                },
+              ],
+            })(
+              <Select defaultValue="1" placeholder={formatMessage({ id: 'form.role.placeholder' })}>
+                <Option value="1" disable={false}>
+                  Giúp việc
+                </Option>
+                <Option value="2" disable={false}>
+                  Người chủ
+                </Option>
+              </Select>
+            )}
+          </FormItem>
+
           <FormItem>
             <InputGroup compact>
               <Select

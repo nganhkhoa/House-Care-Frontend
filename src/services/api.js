@@ -10,8 +10,22 @@ export async function AccountLogin(params) {
 }
 
 export async function Register(params) {
-  return request(`${apiUrl}/register`, {
+  return request(`${apiUrl}/users/signup`, {
     method: 'POST',
+    body: params,
+  });
+}
+
+export async function fakeSubmitForm(params) {
+  return request(`${apiUrl}/works`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function ChooseWork(params) {
+  return request(`${apiUrl}/works/:workId`, {
+    method: 'PUT',
     body: params,
   });
 }

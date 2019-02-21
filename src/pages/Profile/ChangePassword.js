@@ -61,6 +61,7 @@ class BasicForms extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
       if (!err) {
         dispatch({
           type: 'form/submitRegularForm',

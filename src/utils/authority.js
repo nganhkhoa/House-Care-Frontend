@@ -16,7 +16,7 @@ export function getAuthority(str) {
 
 export function setAuthority(userInfo) {
   let Authority = 'undefined';
-  if (userInfo.role !== undefined) Authority = userInfo.role === 1 ? ['helper'] : ['owner'];
+  if (userInfo.role !== undefined) Authority = userInfo.role === 1 ? ['owner'] : ['helper'];
   localStorage.setItem('authority', JSON.stringify(Authority));
   localStorage.setItem('user', JSON.stringify(userInfo));
 }

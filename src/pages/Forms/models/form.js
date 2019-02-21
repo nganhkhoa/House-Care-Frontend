@@ -16,8 +16,9 @@ export default {
 
   effects: {
     *submitRegularForm({ payload }, { call }) {
-      yield call(fakeSubmitForm, payload);
-      message.success('提交成功');
+      result = yield call(fakeSubmitForm, payload);
+      if (result.success) message.success('Tạo công việc thành công');
+      else message.error(result.error);
     },
     *submitStepForm({ payload }, { call, put }) {
       yield call(fakeSubmitForm, payload);

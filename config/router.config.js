@@ -18,7 +18,7 @@ export default [
     authority: ['admin', 'helper', 'owner'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/workplace' },
+      { path: '/', redirect: '/dashboard/' },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -146,6 +146,11 @@ export default [
             name: 'advanced',
             authority: ['admin'],
             component: './Profile/AdvancedProfile',
+          },
+          {
+            path: '/profile/changepassword',
+            name: 'changepassword',
+            component: './Profile/ChangePassword',
           },
         ],
       },
