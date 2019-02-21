@@ -18,42 +18,19 @@ const range = (start, end) => {
   return result;
 };
 
-// Can not select days before today and today
-const disabledDate = current => current && current < moment().endOf('day');
-
-const disabledDateTime = () => ({
-  disabledHours: () => range(0, 7) + range(21, 24),
-  disabledMinutes: () => range(1, 60),
-  disabledSeconds: () => range(1, 60),
-});
 
 @connect(({ loading }) => ({
-  submitting: loading.effects['form/submitRegularForm'],
+  submitting: loading.effects['profile/changepasswd'],
 }))
 @Form.create()
-class BasicForms extends PureComponent {
+class ChangePassword extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      type: '',
-      time: new Date(),
-      timespan: 3,
-      location: '',
-      description: '',
-      salary: '',
-      duration_options: [
-        { label: '1 tiếng', value: 1 },
-        { label: '3 tiếng', value: 3 },
-        { label: '6 tiếng', value: 6 },
-        { label: '9 tiếng', value: 9 },
-      ],
-      salary_options: [
-        { label: '75.000/tiếng', value: 75 },
-        { label: '100.000/tiếng', value: 100 },
-        { label: '150.000/tiếng', value: 150 },
-        { label: '200.000/tiếng', value: 200 },
-      ],
+      username: '',
+      password: '',
+      new_password: ''
     };
   }
 
@@ -64,7 +41,7 @@ class BasicForms extends PureComponent {
       console.log(values);
       if (!err) {
         dispatch({
-          type: 'form/submitRegularForm',
+          type: 'profile/changepasswd',
           payload: values,
         });
       }
@@ -102,142 +79,49 @@ class BasicForms extends PureComponent {
 
     return (
       <PageHeaderWrapper
-        title="Tạo yêu cầu công việc mới"
-        content="Tìm kiếm một người giúp việc mới với các thông tin bên dưới."
+        title="Đổi password"
       >
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem {...formItemLayout} label="Nhập tiêu đề công việc">
+            <FormItem {...formItemLayout} label="UserName">
               {getFieldDecorator('type', {
                 rules: [
                   {
                     required: true,
-                    message: 'Xin hãy nhập tiêu đề công việc',
-                    value: this.state.type,
-                    onChange: this.handleChange.bind('type'),
+                    message: 'UserName',
+                    value: this.state.username,
+                    onChange: this.handleChange.bind('username'),
                   },
                 ],
-              })(<Input placeholder="Dọn nhà" />)}
+              })(<Input placeholder="Username" />)}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="Chọn ngày công việc">
-              {getFieldDecorator('time', {
+            <FormItem {...formItemLayout} label="New password">
+              {getFieldDecorator('type', {
                 rules: [
                   {
                     required: true,
-                    message: 'Xin hãy chọn ngày',
+                    message: 'New password',
+                    value: this.state.password,
+                    onChange: this.handleChange.bind('password'),
                   },
                 ],
-              })(
-                <DatePicker
-                  disabledDate={disabledDate}
-                  disabledTime={disabledDateTime}
-                  showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
-                  value={this.state.time}
-                  onChange={this.handleChange.bind('time')}
-                />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="Chọn thời lượng công việc">
-              {getFieldDecorator('timespan', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Chọn thời lượng công việc',
-                  },
-                ],
-              })(
-                <Select
-                  defaultValue="1"
-                  value={this.state.timespan}
-                  onChange={this.handleChange.bind('timespan')}
-                >
-                  {this.state.duration_options.map(el => {
-                    return (
-                      <Option value={el.value} disable={false}>
-                        {el.label}
-                      </Option>
-                    );
-                  })}
-                  {/* <Option value="1" disable={false}>
-                    1 tiếng
-                  </Option>
-                  <Option value="3" disable={false}>
-                    3 tiếng
-                  </Option>
-                  <Option value="6" disable={false}>
-                    6 tiếng
-                  </Option>
-                  <Option value="12" disable={false}>
-                    12 tiếng
-                  </Option> */}
-                </Select>
-              )}
+              })(<Input placeholder="New password" />)}
             </FormItem>
 
-            <FormItem {...formItemLayout} label="Chọn lương">
-              {getFieldDecorator('salary', {
+            <FormItem {...formItemLayout} label="Confirm password">
+              {getFieldDecorator('type', {
                 rules: [
                   {
                     required: true,
-                    message: 'Chọn lương',
+                    message: 'Confirm password',
+                    value: this.state.new_password,
+                    onChange: this.handleChange.bind('new_password'),
                   },
                 ],
-              })(
-                <Select
-                  defaultValue="75"
-                  value={this.state.salary}
-                  onChange={this.handleChange.bind('salary')}
-                >
-                  {this.state.salary_options.map(el => {
-                    return (
-                      <Option value={el.value} disable={false}>
-                        {el.label}
-                      </Option>
-                    );
-                  })}
-                  {/* <Option value="1" disable={false}>
-                    1 tiếng
-                  </Option>
-                  <Option value="3" disable={false}>
-                    3 tiếng
-                  </Option>
-                  <Option value="6" disable={false}>
-                    6 tiếng
-                  </Option>
-                  <Option value="12" disable={false}>
-                    12 tiếng
-                  </Option> */}
-                </Select>
-              )}
+              })(<Input placeholder="Confirm password" />)}
             </FormItem>
-
-            <FormItem {...formItemLayout} label="Địa chỉ">
-              {getFieldDecorator('location', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Xin hãy nhập địa chỉ',
-                    value: this.state.location,
-                    onChange: this.handleChange.bind('location'),
-                  },
-                ],
-              })(
-                <TextArea style={{ minHeight: 32 }} placeholder="Số 1 đường A, quận 1" rows={4} />
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="Ghi chú công việc">
-              {getFieldDecorator('description', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Hãy nhập ghi chú công việc',
-                    value: this.state.description,
-                    onChange: this.handleChange.bind('description'),
-                  },
-                ],
-              })(<TextArea style={{ minHeight: 32 }} placeholder="" rows={4} />)}
-            </FormItem>
+            
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 Đăng công việc

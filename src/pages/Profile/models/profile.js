@@ -13,6 +13,11 @@ export default {
         payload: response,
       });
     },
+    *changepasswd(_, { call, put }) {
+      result = yield call(ChangePassword, payload);
+      if (result.success) message.success('Đổi password thành công');
+      else message.error(result.error);
+    },
     // *fetchAdvanced(_, { call, put }) {
     //   const response = yield call(queryAdvancedProfile);
     //   yield put({

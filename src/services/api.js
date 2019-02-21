@@ -29,3 +29,10 @@ export async function ChooseWork(params) {
     body: params,
   });
 }
+
+export async function ChangePassword(params) {
+  return request(`${apiUrl}/users/reset_password`, {
+    method: 'POST',
+    body: params,
+  });
+}

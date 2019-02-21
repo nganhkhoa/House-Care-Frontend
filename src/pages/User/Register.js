@@ -319,7 +319,8 @@ class Register extends Component {
               ],
             })(
               <DatePicker
-                showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
+              size = "large"
+              //   showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
                 placeholder={formatMessage({ id: 'form.DoB.placeholder' })}
               />
             )}
@@ -382,8 +383,8 @@ class Register extends Component {
                 onChange={this.changePrefix}
                 style={{ width: '20%' }}
               >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
+                {/* <Option value="86">+86</Option>
+                <Option value="87">+87</Option> */}
               </Select>
               {getFieldDecorator('mobile', {
                 rules: [
@@ -392,7 +393,7 @@ class Register extends Component {
                     message: formatMessage({ id: 'validation.phone-number.required' }),
                   },
                   {
-                    pattern: /^\d{11}$/,
+                    pattern: /^\d{10}$/,
                     message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
                   },
                 ],
