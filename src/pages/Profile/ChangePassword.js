@@ -1,23 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 // import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, DatePicker, Select, Button, Card } from 'antd';
-import moment from 'moment';
+import { Form, Input, Button, Card } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 // import styles from './style.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
-const { TextArea } = Input;
-
-const range = (start, end) => {
-  const result = [];
-  for (let i = start; i < end; i += 1) {
-    result.push(i);
-  }
-  return result;
-};
-
+// const { Option } = Select;
+// const { TextArea } = Input;
 
 @connect(({ loading }) => ({
   submitting: loading.effects['profile/changepasswd'],
@@ -28,9 +18,9 @@ class ChangePassword extends PureComponent {
     super(props);
 
     this.state = {
-      username: '',
       password: '',
-      new_password: ''
+      newPassword: '',
+      retypeNewPassword: '',
     };
   }
 
@@ -38,8 +28,9 @@ class ChangePassword extends PureComponent {
     const { dispatch, form } = this.props;
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
       if (!err) {
+        const { newPassword, retypeNewPassword } = this.state;
+        if (newPassword !== retypeNewPassword) return;
         dispatch({
           type: 'profile/changepasswd',
           payload: values,
@@ -54,6 +45,7 @@ class ChangePassword extends PureComponent {
 
   render() {
     const { submitting } = this.props;
+    const { password, newPassword, retypeNewPassword } = this.state;
     const {
       form: { getFieldDecorator },
     } = this.props;
@@ -78,11 +70,10 @@ class ChangePassword extends PureComponent {
     };
 
     return (
-      <PageHeaderWrapper
-        title="Đổi password"
-      >
+      <PageHeaderWrapper title="Đổi password">
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+            {/*
             <FormItem {...formItemLayout} label="UserName">
               {getFieldDecorator('type', {
                 rules: [
@@ -95,33 +86,46 @@ class ChangePassword extends PureComponent {
                 ],
               })(<Input placeholder="Username" />)}
             </FormItem>
+            */}
+            <FormItem {...formItemLayout} label="Old password">
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'password',
+                    value: password,
+                    onChange: this.handleChange.bind('password'),
+                  },
+                ],
+              })(<Input type="password" placeholder="New password" />)}
+            </FormItem>
 
             <FormItem {...formItemLayout} label="New password">
-              {getFieldDecorator('type', {
+              {getFieldDecorator('new_password', {
                 rules: [
                   {
                     required: true,
                     message: 'New password',
-                    value: this.state.password,
+                    value: newPassword,
                     onChange: this.handleChange.bind('password'),
                   },
                 ],
-              })(<Input placeholder="New password" />)}
+              })(<Input type="password" placeholder="New password" />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label="Confirm password">
-              {getFieldDecorator('type', {
+              {getFieldDecorator('retype_new_password', {
                 rules: [
                   {
                     required: true,
                     message: 'Confirm password',
-                    value: this.state.new_password,
+                    value: retypeNewPassword,
                     onChange: this.handleChange.bind('new_password'),
                   },
                 ],
-              })(<Input placeholder="Confirm password" />)}
+              })(<Input type="password" placeholder="Confirm password" />)}
             </FormItem>
-            
+
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 Đăng công việc
@@ -135,4 +139,4 @@ class ChangePassword extends PureComponent {
   }
 }
 
-export default BasicForms;
+export default ChangePassword;

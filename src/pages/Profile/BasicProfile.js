@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Badge, Table, Divider } from 'antd';
+import { Card, Divider } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './BasicProfile.less';
 
 const { Description } = DescriptionList;
 
@@ -14,7 +13,6 @@ const { Description } = DescriptionList;
 class BasicProfile extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
-    this.props.profile = {};
     dispatch({
       type: 'profile/fetchBasic',
     });
@@ -25,20 +23,22 @@ class BasicProfile extends Component {
     return (
       <PageHeaderWrapper title="Hồ sơ người dùng">
         <Card bordered={false} loading={loading}>
-          <p>{profile.username}</p>
-          {/* <DescriptionList size="large" title={data.name} style={{ marginBottom: 32 }}>
-            <Description term="User name">{data.username}</Description>
-            <Description term="Ngày sinh">{data.DoB}</Description>
-            <Description term="Email">{data.email}</Description>
-            <Description term="Giới tính">{data.sex}</Description>
-            <Description term="Địa chỉ">{data.address}</Description>
+          <DescriptionList size="large" title="Thông tin cơ bản" style={{ marginBottom: 32 }}>
+            <Description term="Name">{profile.name}</Description>
+            <Description term="Username">{profile.username}</Description>
+            <Description term="Email">{profile.email}</Description>
           </DescriptionList>
           <Divider style={{ marginBottom: 32 }} />
           <DescriptionList size="large" title="" style={{ marginBottom: 32 }}>
-            <Description term="Năm kinh nghiệm">{data.experience}</Description>
-            <Description term="Loại người dùng">{data.role}</Description>
-            <Description term="Địa chỉ ví điện tử">{data.walletAddress}</Description>
-          </DescriptionList> */}
+            <Description term="Loại người dùng">{profile.role}</Description>
+          </DescriptionList>
+          {/*
+        <Description term="Ngày sinh">{profile.DoB}</Description>
+        <Description term="Giới tính">{profile.sex}</Description>
+        <Description term="Địa chỉ">{profile.address}</Description>
+        <Description term="Năm kinh nghiệm">{profile.experience}</Description>
+        <Description term="Địa chỉ ví điện tử">{profile.walletAddress}</Description>
+           */}
         </Card>
       </PageHeaderWrapper>
     );

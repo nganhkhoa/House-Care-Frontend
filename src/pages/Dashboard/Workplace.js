@@ -1,35 +1,35 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import Link from 'umi/link';
-import { Row, Col, Card, List, Avatar } from 'antd';
+import { Tooltip, Icon, Button, Row, Col, Card, List, Avatar, Table, Popover } from 'antd';
 
-import { Radar } from '@/components/Charts';
 // import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
-import StandardTable from '@/components/StandardTable';
-
 import styles from './Workplace.less';
 
+/* eslint "no-underscore-dangle": [1, { "allow": ["_id"] }] */
+
 @connect(({ user, project, activities, chart, loading }) => ({
-  currentUser: user.currentUser,
-  project,
+  currentUser: user.currentUser.data,
+  // project,
+  today: project.today,
   activities,
   chart,
   currentUserLoading: loading.effects['user/fetchCurrent'],
-  projectLoading: loading.effects['project/fetchNotice'],
-  activitiesLoading: loading.effects['activities/fetchList'],
+  // projectLoading: loading.effects['project/fetchNotice'],
+  todayLoading: loading.effects['project/fetchToday'],
+  // activitiesLoading: loading.effects['activities/fetchList'],
 }))
 class Workplace extends PureComponent {
   componentDidMount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'user/fetchCurrent',
-    // });
-    // dispatch({
-    //   type: 'project/fetchNotice',
-    // });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/fetchCurrent',
+    });
+    dispatch({
+      type: 'project/fetchToday',
+    });
     // dispatch({
     //   type: 'activities/fetchList',
     // });
@@ -84,14 +84,14 @@ class Workplace extends PureComponent {
 
   render() {
     const {
-      currentUser: { data },
+      currentUser,
       currentUserLoading,
-      project: { notice },
-      projectLoading,
+      // project: { notice },
+      // projectLoading,
+      today,
       // activitiesLoading,
-      chart: { radarData },
+      // chart: { radarData },
     } = this.props;
-    const currentUser = data;
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
@@ -127,6 +127,83 @@ class Workplace extends PureComponent {
       </div>
     );
 
+    const todayColumns = [
+      {
+        title: 'Owner',
+        dataIndex: 'owner.name',
+        key: 'owner',
+        render: (name, { owner }) => {
+          const userContent = (
+            <div>
+              <p>Username: {owner.username}</p>
+              <p>Name: {owner.name}</p>
+              <p>Email: {owner.email}</p>
+            </div>
+          );
+          const userLink = `/users/${owner._id}`;
+          return (
+            <Popover content={userContent} title="User information">
+              <Button href={userLink}>{name}</Button>
+            </Popover>
+          );
+        },
+      },
+      {
+        title: 'Helper',
+        dataIndex: 'helper.name',
+        key: 'helper',
+        render: (name, { helper }) => {
+          if (helper === null)
+            return (
+              <span>
+                <Icon type="user" /> Empty{' '}
+              </span>
+            );
+          const userContent = (
+            <div>
+              <p>Username: {helper.username}</p>
+              <p>Name: {helper.name}</p>
+              <p>Email: {helper.email}</p>
+            </div>
+          );
+          const userLink = `/users/${helper._id}`;
+          return (
+            <Popover content={userContent} title="User information">
+              <Button href={userLink}>{name}</Button>
+            </Popover>
+          );
+        },
+      },
+      {
+        title: 'Time',
+        dataIndex: 'time',
+        key: 'time',
+        render: (time, { timespan }) => {
+          const start = moment(time).hour();
+          const end = start + timespan;
+          const tooltipTitle = `${moment(time).format('D/M: HH')} - ${end}`;
+          return (
+            <Tooltip title={tooltipTitle}>
+              <span>
+                {start}h to {end}h
+              </span>
+            </Tooltip>
+          );
+        },
+      },
+      {
+        title: 'Location',
+        dataIndex: 'location',
+        key: 'location',
+      },
+      {
+        title: 'Salary',
+        dataIndex: 'expectedSalary',
+        key: 'salary',
+        render: (salary, { timespan }) => <span>{salary * timespan * 1000} vnd</span>,
+      },
+    ];
+
     return (
       <PageHeaderWrapper
         loading={currentUserLoading}
@@ -135,59 +212,11 @@ class Workplace extends PureComponent {
       >
         <Row gutter={24}>
           <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              className={styles.projectList}
-              style={{ marginBottom: 24 }}
-              title="Các công việc của ngày hôm nay"
-              bordered={false}
-              extra={<Link to="/">Xem tất cả lịch trình</Link>}
-              loading={projectLoading}
-              bodyStyle={{ padding: 0 }}
-            >
-              {notice.map(item => (
-                <Card.Grid className={styles.projectGrid} key={item.id}>
-                  <Card bodyStyle={{ padding: 0 }} bordered={false}>
-                    <Card.Meta
-                      title={
-                        <div className={styles.cardTitle}>
-                          <Avatar size="small" src={item.logo} />
-                          <Link to={item.href}>{item.title}</Link>
-                        </div>
-                      }
-                      description={item.description}
-                    />
-                    <div className={styles.projectItemContent}>
-                      <Link to={item.memberLink}>{item.member || ''}</Link>
-                      {item.updatedAt && (
-                        <span className={styles.datetime} title={item.updatedAt}>
-                          {moment(item.updatedAt).fromNow()}
-                        </span>
-                      )}
-                    </div>
-                  </Card>
-                </Card.Grid>
-              ))}
-
-              {/* <StandardTable
-              selectedRows={selectedRows}
-              loading={loading}
-              data={data}
-              columns={this.columns}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handleStandardTableChange}
-            /> */}
-            </Card>
+            <Table dataSource={today} columns={todayColumns} />
           </Col>
           <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              style={{ marginBottom: 24 }}
-              bordered={false}
-              title="Thông tin nổi bật"
-              loading={radarData.length === 0}
-            >
-              <div className={styles.chart}>
-                <Radar hasLegend height={343} data={radarData} />
-              </div>
+            <Card style={{ marginBottom: 24 }} bordered={false} title="Thông tin nổi bật">
+              <div className={styles.chart} />
             </Card>
           </Col>
         </Row>

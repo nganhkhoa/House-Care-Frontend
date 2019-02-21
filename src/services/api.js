@@ -36,3 +36,8 @@ export async function ChangePassword(params) {
     body: params,
   });
 }
+export async function queryTodayWork() {
+  return request(`${apiUrl}/works/`, {
+    method: 'GET',
+  });
+}

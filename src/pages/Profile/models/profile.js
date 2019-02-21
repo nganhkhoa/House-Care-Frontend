@@ -1,9 +1,24 @@
 import { queryCurrent } from '@/services/user';
+import { ChangePassword } from '@/services/api';
+import { message } from 'antd';
 
 export default {
   namespace: 'profile',
 
-  state: {},
+  state: {
+    data: {
+      username: '',
+      name: '',
+      user: '',
+      role: 0,
+      email: '',
+      DoB: new Date(),
+      address: '',
+      experience: '',
+      walletAddress: '',
+      sex: '',
+    },
+  },
 
   effects: {
     *fetchBasic(_, { call, put }) {
@@ -13,8 +28,8 @@ export default {
         payload: response,
       });
     },
-    *changepasswd(_, { call, put }) {
-      result = yield call(ChangePassword, payload);
+    *changepasswd({ payload }, { call }) {
+      const result = yield call(ChangePassword, payload);
       if (result.success) message.success('Đổi password thành công');
       else message.error(result.error);
     },
