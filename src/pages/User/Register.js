@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress, DatePicker } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Row,
+  Col,
+  Popover,
+  Progress,
+  DatePicker,
+  message,
+} from 'antd';
 import styles from './Register.less';
-import moment from 'moment';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -62,13 +73,16 @@ class Register extends Component {
   componentDidUpdate() {
     const { form, register } = this.props;
     const account = form.getFieldValue('mail');
-    if (register.status === 'ok') {
+    if (register.success === true) {
       router.push({
         pathname: '/user/register-result',
         state: {
           account,
         },
       });
+    }
+    if (register.fail) {
+      message.error('Error');
     }
   }
 
@@ -106,10 +120,12 @@ class Register extends Component {
     form.validateFields({ force: true }, (err, values) => {
       if (!err) {
         const { prefix } = this.state;
+        const value = values;
+        value.DoB = moment(values.DoB).format('YY/MM/DD');
         dispatch({
           type: 'register/submit',
           payload: {
-            ...values,
+            ...value,
             prefix,
           },
         });
@@ -319,8 +335,8 @@ class Register extends Component {
               ],
             })(
               <DatePicker
-              size = "large"
-              //   showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
+                size="large"
+                //   showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
                 placeholder={formatMessage({ id: 'form.DoB.placeholder' })}
               />
             )}
@@ -365,10 +381,10 @@ class Register extends Component {
               ],
             })(
               <Select defaultValue="1" placeholder={formatMessage({ id: 'form.role.placeholder' })}>
-                <Option value="1" disable={false}>
+                <Option value="0" disable={false}>
                   Giúp việc
                 </Option>
-                <Option value="2" disable={false}>
+                <Option value="1" disable={false}>
                   Người chủ
                 </Option>
               </Select>

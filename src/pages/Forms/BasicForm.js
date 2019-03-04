@@ -19,7 +19,12 @@ const range = (start, end) => {
 };
 
 // Can not select days before today and today
-const disabledDate = current => current && current < moment().endOf('day');
+const disabledDate = current =>
+  current &&
+  current <
+    moment()
+      .endOf('day')
+      .add(1, 'day');
 
 const disabledDateTime = () => ({
   disabledHours: () => range(0, 7) + range(21, 24),
@@ -42,13 +47,13 @@ class BasicForms extends PureComponent {
       location: '',
       description: '',
       salary: '',
-      duration_options: [
+      durationOptions: [
         { label: '1 tiếng', value: 1 },
         { label: '3 tiếng', value: 3 },
         { label: '6 tiếng', value: 6 },
         { label: '9 tiếng', value: 9 },
       ],
-      salary_options: [
+      salaryOptions: [
         { label: '75.000/tiếng', value: 75 },
         { label: '100.000/tiếng', value: 100 },
         { label: '150.000/tiếng', value: 150 },
@@ -99,6 +104,17 @@ class BasicForms extends PureComponent {
       },
     };
 
+    const {
+      type,
+      time,
+      timespan,
+      location,
+      description,
+      salary,
+      durationOptions,
+      salaryOptions,
+    } = this.state;
+
     return (
       <PageHeaderWrapper
         title="Tạo yêu cầu công việc mới"
@@ -112,8 +128,8 @@ class BasicForms extends PureComponent {
                   {
                     required: true,
                     message: 'Xin hãy nhập tiêu đề công việc',
-                    value: this.state.type,
-                    onChange: this.handleChange.bind('type'),
+                    value: type,
+                    onChange: this.handleChange('type'),
                   },
                 ],
               })(<Input placeholder="Dọn nhà" />)}
@@ -132,8 +148,8 @@ class BasicForms extends PureComponent {
                   disabledDate={disabledDate}
                   disabledTime={disabledDateTime}
                   showTime={{ defaultValue: moment('07:00:00', 'HH:mm:ss') }}
-                  value={this.state.time}
-                  onChange={this.handleChange.bind('time')}
+                  value={time}
+                  onChange={this.handleChange('time')}
                 />
               )}
             </FormItem>
@@ -146,18 +162,12 @@ class BasicForms extends PureComponent {
                   },
                 ],
               })(
-                <Select
-                  defaultValue="1"
-                  value={this.state.timespan}
-                  onChange={this.handleChange.bind('timespan')}
-                >
-                  {this.state.duration_options.map(el => {
-                    return (
-                      <Option value={el.value} disable={false}>
-                        {el.label}
-                      </Option>
-                    );
-                  })}
+                <Select defaultValue="1" value={timespan} onChange={this.handleChange('timespan')}>
+                  {durationOptions.map(el => (
+                    <Option value={el.value} disable={false}>
+                      {el.label}
+                    </Option>
+                  ))}
                   {/* <Option value="1" disable={false}>
                     1 tiếng
                   </Option>
@@ -183,18 +193,12 @@ class BasicForms extends PureComponent {
                   },
                 ],
               })(
-                <Select
-                  defaultValue="75"
-                  value={this.state.salary}
-                  onChange={this.handleChange.bind('salary')}
-                >
-                  {this.state.salary_options.map(el => {
-                    return (
-                      <Option value={el.value} disable={false}>
-                        {el.label}
-                      </Option>
-                    );
-                  })}
+                <Select defaultValue="75" value={salary} onChange={this.handleChange('salary')}>
+                  {salaryOptions.map(el => (
+                    <Option value={el.value} disable={false}>
+                      {el.label}
+                    </Option>
+                  ))}
                   {/* <Option value="1" disable={false}>
                     1 tiếng
                   </Option>
@@ -217,8 +221,8 @@ class BasicForms extends PureComponent {
                   {
                     required: true,
                     message: 'Xin hãy nhập địa chỉ',
-                    value: this.state.location,
-                    onChange: this.handleChange.bind('location'),
+                    value: location,
+                    onChange: this.handleChange('location'),
                   },
                 ],
               })(
@@ -231,8 +235,8 @@ class BasicForms extends PureComponent {
                   {
                     required: true,
                     message: 'Hãy nhập ghi chú công việc',
-                    value: this.state.description,
-                    onChange: this.handleChange.bind('description'),
+                    value: description,
+                    onChange: this.handleChange('description'),
                   },
                 ],
               })(<TextArea style={{ minHeight: 32 }} placeholder="" rows={4} />)}

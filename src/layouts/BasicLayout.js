@@ -56,12 +56,12 @@ const query = {
 
 const options = {
   contracts: [],
-  web3: {
-    fallback: {
-      type: 'ws',
-      url: 'ws://127.0.0.1:8545',
-    },
-  },
+  // web3: {
+  //   fallback: {
+  //     type: 'ws',
+  //     url: 'ws://127.0.0.1:8545',
+  //   },
+  // },
 };
 const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);

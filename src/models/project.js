@@ -1,4 +1,5 @@
-import { queryProjectNotice, queryTodayWork } from '@/services/api';
+import { queryProjectNotice, queryTodayWork, queryWork, ChooseWork } from '@/services/api';
+// import { message } from 'antd';
 
 export default {
   namespace: 'project',
@@ -6,6 +7,7 @@ export default {
   state: {
     notice: [],
     today: [],
+    work: [],
   },
 
   effects: {
@@ -23,6 +25,19 @@ export default {
         payload: Array.isArray(response.data) ? response.data : [],
       });
     },
+    *fetchAllDate(_, { call, put }) {
+      const response = yield call(queryWork);
+      yield put({
+        type: 'saveWork',
+        payload: Array.isArray(response.data) ? response.data : [],
+      });
+    },
+    *chooseWork({ payload }, { call }) {
+      const response = yield call(ChooseWork, payload);
+      const { success, message } = response;
+      if (success) message.success('Đăng ký công việc thành công');
+      else message.error(message);
+    },
   },
 
   reducers: {
@@ -36,6 +51,12 @@ export default {
       return {
         ...state,
         today: action.payload,
+      };
+    },
+    saveWork(state, action) {
+      return {
+        ...state,
+        work: action.payload,
       };
     },
   },

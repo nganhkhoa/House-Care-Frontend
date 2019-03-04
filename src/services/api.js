@@ -24,9 +24,10 @@ export async function fakeSubmitForm(params) {
 }
 
 export async function ChooseWork(params) {
-  return request(`${apiUrl}/works/:workId`, {
+  const { workId, ...newParams } = params;
+  return request(`${apiUrl}/works/${workId}`, {
     method: 'PUT',
-    body: params,
+    body: newParams,
   });
 }
 
@@ -39,5 +40,23 @@ export async function ChangePassword(params) {
 export async function queryTodayWork() {
   return request(`${apiUrl}/works/`, {
     method: 'GET',
+  });
+}
+
+export async function queryWork() {
+  return request(`${apiUrl}/works/pending`, {
+    method: 'GET',
+  });
+}
+
+export async function addWalletAddress() {
+  return request(`${apiUrl}/users/walletAddress`, {
+    method: 'POST',
+  });
+}
+
+export async function addContractAddress() {
+  return request(`${apiUrl}/works/contractAddress`, {
+    method: 'POST',
   });
 }

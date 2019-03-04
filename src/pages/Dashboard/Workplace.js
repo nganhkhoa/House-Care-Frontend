@@ -10,7 +10,8 @@ import styles from './Workplace.less';
 
 /* eslint "no-underscore-dangle": [1, { "allow": ["_id"] }] */
 
-@connect(({ user, project, activities, chart, loading }) => ({
+@connect(({ web3, user, project, activities, chart, loading }) => ({
+  web3: web3.instance,
   currentUser: user.currentUser.data,
   // project,
   today: project.today,
@@ -19,6 +20,7 @@ import styles from './Workplace.less';
   currentUserLoading: loading.effects['user/fetchCurrent'],
   // projectLoading: loading.effects['project/fetchNotice'],
   todayLoading: loading.effects['project/fetchToday'],
+  web3Loading: loading.effects['web3/init'],
   // activitiesLoading: loading.effects['activities/fetchList'],
 }))
 class Workplace extends PureComponent {
@@ -29,6 +31,9 @@ class Workplace extends PureComponent {
     });
     dispatch({
       type: 'project/fetchToday',
+    });
+    dispatch({
+      type: 'web3/init',
     });
     // dispatch({
     //   type: 'activities/fetchList',
@@ -89,9 +94,12 @@ class Workplace extends PureComponent {
       // project: { notice },
       // projectLoading,
       today,
+      web3,
       // activitiesLoading,
       // chart: { radarData },
     } = this.props;
+
+    console.log(web3);
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (

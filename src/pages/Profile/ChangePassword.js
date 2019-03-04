@@ -97,7 +97,7 @@ class ChangePassword extends PureComponent {
                     onChange: this.handleChange.bind('password'),
                   },
                 ],
-              })(<Input type="password" placeholder="New password" />)}
+              })(<Input type="password" placeholder="Old password" />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label="New password">
@@ -107,7 +107,7 @@ class ChangePassword extends PureComponent {
                     required: true,
                     message: 'New password',
                     value: newPassword,
-                    onChange: this.handleChange.bind('password'),
+                    onChange: this.handleChange.bind('newPassword'),
                   },
                 ],
               })(<Input type="password" placeholder="New password" />)}
@@ -120,7 +120,7 @@ class ChangePassword extends PureComponent {
                     required: true,
                     message: 'Confirm password',
                     value: retypeNewPassword,
-                    onChange: this.handleChange.bind('new_password'),
+                    onChange: this.handleChange.bind('retypeNewPassword'),
                   },
                 ],
               })(<Input type="password" placeholder="Confirm password" />)}
@@ -128,7 +128,7 @@ class ChangePassword extends PureComponent {
 
             <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={submitting}>
-                Đăng công việc
+                Submit
               </Button>
               <Button style={{ marginLeft: 8 }}>Hủy</Button>
             </FormItem>

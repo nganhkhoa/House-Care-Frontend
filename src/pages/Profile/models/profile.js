@@ -31,7 +31,7 @@ export default {
     *changepasswd({ payload }, { call }) {
       const result = yield call(ChangePassword, payload);
       if (result.success) message.success('Đổi password thành công');
-      else message.error(result.error);
+      else message.error(result.message);
     },
     // *fetchAdvanced(_, { call, put }) {
     //   const response = yield call(queryAdvancedProfile);

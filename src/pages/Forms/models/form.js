@@ -1,5 +1,5 @@
-import { routerRedux } from 'dva/router';
-import { message } from 'antd';
+// import { routerRedux } from 'dva/router';
+// import { message } from 'antd';
 import { fakeSubmitForm } from '@/services/api';
 
 export default {
@@ -16,22 +16,23 @@ export default {
 
   effects: {
     *submitRegularForm({ payload }, { call }) {
-      result = yield call(fakeSubmitForm, payload);
-      if (result.success) message.success('Tạo công việc thành công');
-      else message.error(result.error);
+      const response = yield call(fakeSubmitForm, payload);
+      const { success, message } = response;
+      if (success) message.success('Đăng ký việc mới thành công');
+      else message.error(message);
     },
-    *submitStepForm({ payload }, { call, put }) {
-      yield call(fakeSubmitForm, payload);
-      yield put({
-        type: 'saveStepFormData',
-        payload,
-      });
-      yield put(routerRedux.push('/form/step-form/result'));
-    },
-    *submitAdvancedForm({ payload }, { call }) {
-      yield call(fakeSubmitForm, payload);
-      message.success('提交成功');
-    },
+    // *submitStepForm({ payload }, { call, put }) {
+    //   yield call(fakeSubmitForm, payload);
+    //   yield put({
+    //     type: 'saveStepFormData',
+    //     payload,
+    //   });
+    //   yield put(routerRedux.push('/form/step-form/result'));
+    // },
+    // *submitAdvancedForm({ payload }, { call }) {
+    //   yield call(fakeSubmitForm, payload);
+    //   message.success('提交成功');
+    // },
   },
 
   reducers: {

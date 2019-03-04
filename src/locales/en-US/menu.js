@@ -14,7 +14,7 @@ export default {
   'menu.form.stepform.result': 'Step Form(finished)',
   'menu.form.advancedform': 'Advanced Form',
   'menu.list': 'List',
-  'menu.list.searchtable': 'Search Table',
+  'menu.list.searchtable': 'Work List',
   'menu.list.basiclist': 'Basic List',
   'menu.list.cardlist': 'Card List',
   'menu.list.searchlist': 'Search List',

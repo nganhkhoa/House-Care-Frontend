@@ -4,6 +4,8 @@ import { Card, Divider } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
+import moment from 'moment';
+
 const { Description } = DescriptionList;
 
 @connect(({ profile, loading }) => ({
@@ -20,6 +22,9 @@ class BasicProfile extends Component {
 
   render() {
     const { profile, loading } = this.props;
+    const sex = profile.sex === 2 ? 'Nam' : 'Nữ';
+    const dob = moment(profile.DoB).format('LL');
+    const role = profile.role === 1 ? 'Người chủ' : 'Người giúp việc';
     return (
       <PageHeaderWrapper title="Hồ sơ người dùng">
         <Card bordered={false} loading={loading}>
@@ -30,15 +35,14 @@ class BasicProfile extends Component {
           </DescriptionList>
           <Divider style={{ marginBottom: 32 }} />
           <DescriptionList size="large" title="" style={{ marginBottom: 32 }}>
-            <Description term="Loại người dùng">{profile.role}</Description>
+            <Description term="Loại người dùng">{role}</Description>
+            <Description term="Ngày sinh">{dob}</Description>
+            <Description term="Giới tính">{sex}</Description>
+            <Description term="Địa chỉ">{profile.address}</Description>
+            <Description term="Năm kinh nghiệm">{profile.experience}</Description>
           </DescriptionList>
-          {/*
-        <Description term="Ngày sinh">{profile.DoB}</Description>
-        <Description term="Giới tính">{profile.sex}</Description>
-        <Description term="Địa chỉ">{profile.address}</Description>
-        <Description term="Năm kinh nghiệm">{profile.experience}</Description>
-        <Description term="Địa chỉ ví điện tử">{profile.walletAddress}</Description>
-           */}
+
+          {/* <Description term="Địa chỉ ví điện tử">{profile.walletAddress}</Description> */}
         </Card>
       </PageHeaderWrapper>
     );

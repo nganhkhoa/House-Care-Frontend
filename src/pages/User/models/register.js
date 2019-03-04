@@ -6,7 +6,8 @@ export default {
   namespace: 'register',
 
   state: {
-    status: undefined,
+    success: false,
+    fail: false,
   },
 
   effects: {
@@ -25,7 +26,8 @@ export default {
       reloadAuthorized();
       return {
         ...state,
-        status: payload.status,
+        success: payload.success,
+        fail: !payload.success,
       };
     },
   },
