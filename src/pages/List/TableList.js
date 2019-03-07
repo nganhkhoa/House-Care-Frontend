@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Tooltip, Button, Row, List, Avatar, Table, Popover } from 'antd';
+import { Tooltip, Button, Row, Avatar, Table, Popover } from 'antd';
 
 // import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -39,24 +39,23 @@ class Workplace extends PureComponent {
   }
 
   accept(workId) {
+    // console.log(workId);
     // khi 1 người nhấn vào nút accept thì trường dữ liệu đó sẽ bị xóa
     // dong huy bo do se duoc them vao lich trinh cua nguoi giup viec
     // lich trinh cua nguoi thue se cap nhat ten cua nguoi giup viec
     // bảng hiển thị của những người khác cũng sẽ không có
-
     const { dispatch } = this.props;
     // cap nhat lai helper cho cong viec
     // dispatch({
     //   type: 'user/fetchCurrent',
     // });
-
     dispatch({
       type: 'project/chooseWork',
       payload: {
         workId,
       },
     });
-
+    //
     dispatch({
       type: 'project/fetchAllDate',
       payload: {
@@ -72,42 +71,42 @@ class Workplace extends PureComponent {
   //   // });
   // }
 
-  renderActivities() {
-    const {
-      activities: { list },
-    } = this.props;
-    return list.map(item => {
-      const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
-        if (item[key]) {
-          return (
-            <a href={item[key].link} key={item[key].name}>
-              {item[key].name}
-            </a>
-          );
-        }
-        return key;
-      });
-      return (
-        <List.Item key={item.id}>
-          <List.Item.Meta
-            avatar={<Avatar src={item.user.avatar} />}
-            title={
-              <span>
-                <a className={styles.username}>{item.user.name}</a>
-                &nbsp;
-                <span className={styles.event}>{events}</span>
-              </span>
-            }
-            description={
-              <span className={styles.datetime} title={item.updatedAt}>
-                {moment(item.updatedAt).fromNow()}
-              </span>
-            }
-          />
-        </List.Item>
-      );
-    });
-  }
+  // renderActivities() {
+  //   const {
+  //     activities: { list },
+  //   } = this.props;
+  //   return list.map(item => {
+  //     const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
+  //       if (item[key]) {
+  //         return (
+  //           <a href={item[key].link} key={item[key].name}>
+  //             {item[key].name}
+  //           </a>
+  //         );
+  //       }
+  //       return key;
+  //     });
+  //     return (
+  //       <List.Item key={item.id}>
+  //         <List.Item.Meta
+  //           avatar={<Avatar src={item.user.avatar} />}
+  //           title={
+  //             <span>
+  //               <a className={styles.username}>{item.user.name}</a>
+  //               &nbsp;
+  //               <span className={styles.event}>{events}</span>
+  //             </span>
+  //           }
+  //           description={
+  //             <span className={styles.datetime} title={item.updatedAt}>
+  //               {moment(item.updatedAt).fromNow()}
+  //             </span>
+  //           }
+  //         />
+  //       </List.Item>
+  //     );
+  //   });
+  // }
 
   render() {
     const {
@@ -164,7 +163,7 @@ class Workplace extends PureComponent {
           if (helper === null)
             return (
               <span>
-                <Button type="text" size="small" onClick={this.accept(this, _id)}>
+                <Button type="text" size="small" onClick={() => this.accept(_id)}>
                   Accept
                 </Button>
               </span>
