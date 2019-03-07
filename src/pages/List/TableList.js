@@ -38,13 +38,6 @@ class Workplace extends PureComponent {
     // });
   }
 
-  componentWillUnmount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'chart/clear',
-    // });
-  }
-
   accept(workId) {
     // khi 1 người nhấn vào nút accept thì trường dữ liệu đó sẽ bị xóa
     // dong huy bo do se duoc them vao lich trinh cua nguoi giup viec
@@ -71,6 +64,13 @@ class Workplace extends PureComponent {
       },
     });
   }
+
+  // componentWillUnmount() {
+  //   // const { dispatch } = this.props;
+  //   // dispatch({
+  //   //   type: 'chart/clear',
+  //   // });
+  // }
 
   renderActivities() {
     const {

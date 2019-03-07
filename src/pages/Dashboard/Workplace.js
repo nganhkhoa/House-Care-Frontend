@@ -10,8 +10,8 @@ import styles from './Workplace.less';
 
 /* eslint "no-underscore-dangle": [1, { "allow": ["_id"] }] */
 
-@connect(({ web3, user, project, activities, chart, loading }) => ({
-  web3: web3.instance,
+@connect(({ user, project, activities, chart, loading }) => ({
+  // web3Instance: web3.instance,
   currentUser: user.currentUser.data,
   // project,
   today: project.today,
@@ -34,6 +34,9 @@ class Workplace extends PureComponent {
     });
     dispatch({
       type: 'web3/init',
+    });
+    dispatch({
+      type: 'metamask/fetchWalletAddress',
     });
     // dispatch({
     //   type: 'activities/fetchList',
@@ -94,12 +97,22 @@ class Workplace extends PureComponent {
       // project: { notice },
       // projectLoading,
       today,
-      web3,
+      // web3Instance,
       // activitiesLoading,
       // chart: { radarData },
+      web3Loading,
     } = this.props;
 
-    console.log(web3);
+    console.log('AAA');
+    console.log(currentUser);
+    // while(web3 ===undefined){
+    //   continue;
+    // }
+
+    if (web3Loading === true) {
+      return <p>...Loading</p>;
+    }
+    // console.log(web3.eth.defaultAccount); // tu da chay cho coi ne
 
     const pageHeaderContent =
       currentUser && Object.keys(currentUser).length ? (
@@ -210,6 +223,24 @@ class Workplace extends PureComponent {
         key: 'salary',
         render: (salary, { timespan }) => <span>{salary * timespan * 1000} vnd</span>,
       },
+      // {
+      //   title: 'Contract',
+      //   key: 'contract',
+      //   render: (name, { helper }) => {
+      //     if (helper != null) {
+      //       return <p>Can not create contract</p>;
+      //     }
+      //     if (currentUser.role === '1') {
+      //       return (
+      //         <span>
+      //           <Button type="text" size="small">
+      //             Create Contract
+      //           </Button>
+      //         </span>
+      //       );
+      //     }
+      //   },
+      // },
     ];
 
     return (

@@ -40,6 +40,7 @@ class BasicProfile extends Component {
             <Description term="Giới tính">{sex}</Description>
             <Description term="Địa chỉ">{profile.address}</Description>
             <Description term="Năm kinh nghiệm">{profile.experience}</Description>
+            <Description term="Địa chỉ ví">{profile.walletAddress}</Description>
           </DescriptionList>
 
           {/* <Description term="Địa chỉ ví điện tử">{profile.walletAddress}</Description> */}
