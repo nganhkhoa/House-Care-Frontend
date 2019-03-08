@@ -6,12 +6,15 @@ import { Tooltip, Icon, Button, Row, Col, Card, List, Avatar, Table, Popover } f
 // import EditableLinkGroup from '@/components/EditableLinkGroup';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
+import Work from '@/contracts/Work';
+
 import styles from './Workplace.less';
 
 /* eslint "no-underscore-dangle": [1, { "allow": ["_id"] }] */
 
-@connect(({ user, project, activities, chart, loading }) => ({
-  // web3Instance: web3.instance,
+@connect(({ user, web3, project, activities, chart, loading }) => ({
+  web3Instance: web3.instance,
+  defaultAddress: web3.defaultAddress,
   currentUser: user.currentUser.data,
   // project,
   today: project.today,
@@ -49,67 +52,50 @@ class Workplace extends PureComponent {
   componentWillUnmount() {
     // const { dispatch } = this.props;
     // dispatch({
-    //   type: 'chart/clear',
-    // });
+    //   type: 'chart/clear',{
+    // });}
   }
 
-  renderActivities() {
-    const {
-      activities: { list },
-    } = this.props;
-    return list.map(item => {
-      const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
-        if (item[key]) {
-          return (
-            <a href={item[key].link} key={item[key].name}>
-              {item[key].name}
-            </a>
-          );
-        }
-        return key;
+  createContract(workInfo) {
+    const { web3Instance, defaultAddress } = this.props;
+    const { abi, bytecode } = Work;
+    const { user, helper, _id, location, type, expectedSalary, time, timespan } = workInfo;
+
+    console.log(defaultAddress);
+
+    const contract = new web3Instance.eth.Contract(abi);
+    contract.options = {
+      from: defaultAddress,
+      data: bytecode,
+      jsonInterface: abi,
+    };
+
+    contract
+      .deploy({
+        arguments: [
+          // user.walletAddress,
+          // helper.walletAddress,
+          // _id,
+          // location,
+          // type,
+          // expectedSalary * timespan,
+          // moment(time).unix(),
+        ],
+      })
+      .send({
+        from: defaultAddress,
+        gas: 1000000,
+        gasPrice: 100000,
+      })
+      .then(contractInstance => {
+        console.log(contractInstance.options.address);
       });
-      return (
-        <List.Item key={item.id}>
-          <List.Item.Meta
-            avatar={<Avatar src={item.user.avatar} />}
-            title={
-              <span>
-                <a className={styles.username}>{item.user.name}</a>
-                &nbsp;
-                <span className={styles.event}>{events}</span>
-              </span>
-            }
-            description={
-              <span className={styles.datetime} title={item.updatedAt}>
-                {moment(item.updatedAt).fromNow()}
-              </span>
-            }
-          />
-        </List.Item>
-      );
-    });
   }
 
   render() {
-    const {
-      currentUser,
-      currentUserLoading,
-      // project: { notice },
-      // projectLoading,
-      today,
-      // web3Instance,
-      // activitiesLoading,
-      // chart: { radarData },
-      web3Loading,
-    } = this.props;
+    const { currentUser, currentUserLoading, today, web3Loading } = this.props;
 
-    console.log('AAA');
-    console.log(currentUser);
-    // while(web3 ===undefined){
-    //   continue;
-    // }
-
-    if (web3Loading === true) {
+    if (web3Loading === true || web3Loading === undefined) {
       return <p>...Loading</p>;
     }
     // console.log(web3.eth.defaultAccount); // tu da chay cho coi ne
@@ -223,24 +209,24 @@ class Workplace extends PureComponent {
         key: 'salary',
         render: (salary, { timespan }) => <span>{salary * timespan * 1000} vnd</span>,
       },
-      // {
-      //   title: 'Contract',
-      //   key: 'contract',
-      //   render: (name, { helper }) => {
-      //     if (helper != null) {
-      //       return <p>Can not create contract</p>;
-      //     }
-      //     if (currentUser.role === '1') {
-      //       return (
-      //         <span>
-      //           <Button type="text" size="small">
-      //             Create Contract
-      //           </Button>
-      //         </span>
-      //       );
-      //     }
-      //   },
-      // },
+      {
+        title: 'Contract',
+        dataIndex: 'contractAddress',
+        key: 'contractAddress',
+        render: (contractAddress, workInfo) => {
+          const { helper } = workInfo;
+          if (helper === null) {
+            return <p>Can not create contract</p>;
+          }
+          if (currentUser.role === 1 && contractAddress === null) {
+            return (
+              <Button type="text" size="small" onClick={() => this.createContract(workInfo)}>
+                Create Contract
+              </Button>
+            );
+          }
+        },
+      },
     ];
 
     return (

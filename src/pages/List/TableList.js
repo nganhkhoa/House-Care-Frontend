@@ -55,7 +55,6 @@ class Workplace extends PureComponent {
         workId,
       },
     });
-    //
     dispatch({
       type: 'project/fetchAllDate',
       payload: {

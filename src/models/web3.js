@@ -1,44 +1,48 @@
-// // import { message } from 'antd';
+// import { message } from 'antd';
+import Web3 from 'web3';
 
-// const getStatus = state => state.web3Init;
+const getStatus = state => state.web3Init;
 
-// export default {
-//   namespace: 'web3',
+export default {
+  namespace: 'web3',
 
-//   state: {
-//     web3Init: false,
-//   },
+  state: {
+    web3Init: false,
+    instance: {},
+    defaultAddress: '',
+  },
 
-//   effects: {
-//     *init(_, { select, put }) {
-//       const web3Init = yield select(getStatus);
-//       if (web3Init) return;
-//       if (window.ethereum) {
-//         window.web3 = new Web3(ethereum);
-//         try {
-//           // Request account access if needed
-//           ethereum.enable();
-//           // Acccounts now exposed
-//           yield put({
-//             type: 'setWeb3',
-//             payload: web3,
-//           });
-//         } catch (error) {
-//           // User denied account access...
-//         }
-//       }
-//     },
-//   },
+  effects: {
+    *init(_, { call, select, put }) {
+      const web3Init = yield select(getStatus);
+      if (web3Init) return;
+      if (window.ethereum) {
+        try {
+          yield call(window.ethereum.enable);
+          const web3 = new Web3(ethereum);
+          yield put({
+            type: 'setWeb3',
+            payload: {
+              instance: web3,
+              defaultAddress: ethereum.selectedAddress,
+            },
+          });
+        } catch (error) {
+          console.log('ERRROR', error);
+          // User denied account access...
+        }
+      }
+    },
+  },
 
-//   reducers: {
-//     setWeb3(state, { payload }) {
-//       console.log('ADDD');
-//       console.log(payload.selectedAddress);
-//       return {
-//         instance: payload,
-//         currentAddress: payload.selectedAddress,
-//         web3Init: true,
-//       };
-//     },
-//   },
-// };
+  reducers: {
+    setWeb3(state, { payload }) {
+      console.log(payload);
+      return {
+        instance: payload.instance,
+        defaultAddress: payload.defaultAddress,
+        web3Init: true,
+      };
+    },
+  },
+};
